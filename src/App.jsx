@@ -1,7 +1,13 @@
+import { Header, ProductGallery, ShoppingCart } from './components/organisms'
+
 function App() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <h1 className="text-2xl font-bold text-center py-8">Tienda Online</h1>
+      <Header onLoginClick={() => {}} />
+      <main>
+        <ProductGallery />
+      </main>
+      <ShoppingCart />
     </div>
   )
 }
