@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MainLayout } from './components/templates'
 import { ProductGallery, LoginModal, ToastContainer } from './components/organisms'
+import ScrollToTop from './components/atoms/ScrollToTop'
 import { ToastContext } from './context/ToastContext'
 import useToast from './hooks/useToast'
 
@@ -14,6 +15,7 @@ function App() {
         <ProductGallery />
         {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
       </MainLayout>
+      <ScrollToTop />
       <ToastContainer toasts={toasts} onRemove={removeToast} />
     </ToastContext.Provider>
   )
