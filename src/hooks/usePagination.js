@@ -11,7 +11,10 @@ function usePagination(items, pageSize = 6) {
     setPage(1)
   }, [items.length])
 
-  const goTo = (n) => setPage(Math.min(Math.max(1, n), totalPages))
+  const goTo = (n) => {
+    setPage(Math.min(Math.max(1, n), totalPages))
+    document.getElementById('galeria')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
   const next = () => goTo(currentPage + 1)
   const prev = () => goTo(currentPage - 1)
 
