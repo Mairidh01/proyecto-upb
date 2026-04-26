@@ -1,18 +1,92 @@
-# React + Vite
+# 🛍️ Tienda Online — Reto Fullstack
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación de e-commerce construida con React + Vite siguiendo la arquitectura **Atomic Design**. Consume la [FakeStore API](https://fakestoreapi.com) en tiempo real con fallback a datos locales.
 
-Currently, two official plugins are available:
+**Demo en vivo:** [https://Mairidh01.github.io/proyecto-upb](https://Mairidh01.github.io/proyecto-upb)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Tecnologías
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+| Capa | Tecnología |
+|---|---|
+| Frontend | React 19 + Vite 8 |
+| Estilos | Tailwind CSS v4 |
+| Estado | Zustand con `persist` middleware |
+| API | FakeStore API |
+| Deploy | GitHub Pages |
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
+## Arquitectura Atomic Design
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+src/
+├── components/
+│   ├── atoms/        # Button, Input, Badge, Rating, Skeleton, Toast, WishlistButton, ScrollToTop
+│   ├── molecules/    # ProductCard, SearchBar, CartItem, ProductCardSkeleton, PriceTag
+│   ├── organisms/    # Header, ProductGallery, ShoppingCart, LoginModal, CheckoutPreview,
+│   │                 # ProductDetail, WishlistPanel, HeroBanner, Footer, ToastContainer, ErrorBoundary
+│   └── templates/    # MainLayout
+├── context/          # ToastContext
+├── data/             # Mockdata (products, categories, users)
+├── hooks/            # useProducts, useCategories, useDebounce, usePagination, useToast
+└── store/            # Zustand store (cart, auth, wishlist, UI)
+```
+
+---
+
+## Funcionalidades
+
+- Catálogo de productos desde FakeStore API con fallback a mockdata
+- Búsqueda en tiempo real con debounce (350ms)
+- Filtro por categoría y precio máximo deslizable
+- Ordenamiento por precio, valoración y nombre
+- Carrito de compras persistente con controles de cantidad
+- Panel de favoritos (wishlist) persistente
+- Autenticación simulada con usuarios de prueba
+- Checkout con formulario de dirección y número de pedido
+- Modal de detalle de producto
+- Toast notifications con animación slide-in
+- Header responsive con menú hamburguesa en mobile
+- Hero banner con accesos rápidos por categoría
+- Skeleton loading mientras carga la API
+- Indicador de fuente de datos (API vs local)
+- Scroll to top automático al paginar
+- ErrorBoundary global
+
+---
+
+## Instalación
+
+```bash
+git clone https://github.com/Mairidh01/proyecto-upb.git
+cd proyecto-upb
+npm install
+cp .env.example .env
+npm run dev
+```
+
+## Variables de entorno
+
+```
+VITE_API_URL=https://fakestoreapi.com
+```
+
+## Scripts
+
+| Comando | Descripción |
+|---|---|
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build de producción |
+| `npm run deploy` | Publica en GitHub Pages |
+
+---
+
+## Usuarios de prueba
+
+| Usuario | Contraseña | Rol |
+|---|---|---|
+| admin | admin123 | Administrador |
+| johnd | johnd123 | Cliente |
+| marias | marias123 | Cliente |
