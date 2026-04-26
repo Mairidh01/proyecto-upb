@@ -1,9 +1,22 @@
-import Input from '../atoms/Input'
+import { useState, useEffect } from 'react'
 import useStore from '../../store/useStore'
+import useDebounce from '../../hooks/useDebounce'
 
 function SearchBar({ className = '' }) {
-  const searchQuery = useStore((state) => state.searchQuery)
   const setSearchQuery = useStore((state) => state.setSearchQuery)
+  const searchQuery = useStore((state) => state.searchQuery)
+
+  const [localValue, setLocalValue] = useState(searchQuery)
+  const debounced = useDebounce(localValue, 350)
+
+  useEffect(() => {
+    setSearchQuery(debounced)
+  }, [debounced, setSearchQuery])
+
+  const handleClear = () => {
+    setLocalValue('')
+    setSearchQuery('')
+  }
 
   return (
     <div className={`relative ${className}`}>
@@ -16,17 +29,18 @@ function SearchBar({ className = '' }) {
       <input
         type="text"
         placeholder="Buscar productos..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full rounded-lg border border-gray-300 pl-9 pr-4 py-2 text-sm
+        value={localValue}
+        onChange={(e) => setLocalValue(e.target.value)}
+        className="w-full rounded-lg border border-gray-300 pl-9 pr-8 py-2 text-sm
           text-gray-900 placeholder:text-gray-400 outline-none
           focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200
           transition-colors duration-150"
       />
-      {searchQuery && (
+      {localValue && (
         <button
-          onClick={() => setSearchQuery('')}
+          onClick={handleClear}
           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          aria-label="Limpiar búsqueda"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
