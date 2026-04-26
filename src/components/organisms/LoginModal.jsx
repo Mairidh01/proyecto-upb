@@ -4,6 +4,7 @@ import Input from '../atoms/Input'
 import { users } from '../../data'
 import useStore from '../../store/useStore'
 import { useToastContext } from '../../context/ToastContext'
+import Divider from '../atoms/Divider'
 
 function LoginModal({ onClose }) {
   const login = useStore((state) => state.login)
@@ -73,6 +74,8 @@ function LoginModal({ onClose }) {
           <p>👤 <strong>johnd</strong> / johnd123</p>
           <p>👤 <strong>marias</strong> / marias123</p>
         </div>
+
+        <Divider label="o ingresa con tu cuenta" />
 
         {/* Formulario */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
