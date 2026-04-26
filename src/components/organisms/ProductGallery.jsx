@@ -13,22 +13,32 @@ function ProductGallery() {
   const setSelectedCategory = useStore((state) => state.setSelectedCategory)
   const [page, setPage] = useState(1)
   const [selectedProduct, setSelectedProduct] = useState(null)
+  const [sortBy, setSortBy] = useState('default')
+  const [maxPrice, setMaxPrice] = useState(1000)
 
   const { products, loading, error, source } = useProducts()
   const categories = useCategories()
 
   const filtered = useMemo(() => {
     const q = searchQuery.toLowerCase()
-    return products.filter((p) => {
+    let result = products.filter((p) => {
       const matchesCategory =
         selectedCategory === 'all' || p.category === selectedCategory
       const matchesSearch =
         !q ||
         p.title.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q)
-      return matchesCategory && matchesSearch
+      const matchesPrice = p.price <= maxPrice
+      return matchesCategory && matchesSearch && matchesPrice
     })
-  }, [products, searchQuery, selectedCategory])
+
+    if (sortBy === 'price-asc') result = [...result].sort((a, b) => a.price - b.price)
+    else if (sortBy === 'price-desc') result = [...result].sort((a, b) => b.price - a.price)
+    else if (sortBy === 'rating') result = [...result].sort((a, b) => b.rating.rate - a.rating.rate)
+    else if (sortBy === 'name') result = [...result].sort((a, b) => a.title.localeCompare(b.title))
+
+    return result
+  }, [products, searchQuery, selectedCategory, sortBy, maxPrice])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const currentPage = Math.min(page, totalPages)
@@ -74,6 +84,38 @@ function ProductGallery() {
             {cat.label}
           </button>
         ))}
+      </div>
+
+      {/* Controles de ordenamiento y precio */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <select
+          value={sortBy}
+          onChange={(e) => { setSortBy(e.target.value); setPage(1) }}
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700
+            outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 bg-white"
+        >
+          <option value="default">Ordenar por</option>
+          <option value="price-asc">Precio: menor a mayor</option>
+          <option value="price-desc">Precio: mayor a menor</option>
+          <option value="rating">Mejor valorados</option>
+          <option value="name">Nombre A-Z</option>
+        </select>
+
+        <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+          <span className="text-sm text-gray-500 shrink-0">Precio máx:</span>
+          <input
+            type="range"
+            min={0}
+            max={1000}
+            step={10}
+            value={maxPrice}
+            onChange={(e) => { setMaxPrice(Number(e.target.value)); setPage(1) }}
+            className="flex-1 accent-indigo-600"
+          />
+          <span className="text-sm font-medium text-indigo-600 w-16 text-right">
+            ${maxPrice}
+          </span>
+        </div>
       </div>
 
       {/* Skeletons de carga */}
