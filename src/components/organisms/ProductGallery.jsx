@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { ProductCard, ProductCardSkeleton } from '../molecules'
 import Button from '../atoms/Button'
+import ProductDetail from './ProductDetail'
 import { useProducts, useCategories } from '../../hooks'
 import useStore from '../../store/useStore'
 
@@ -11,6 +12,7 @@ function ProductGallery() {
   const selectedCategory = useStore((state) => state.selectedCategory)
   const setSelectedCategory = useStore((state) => state.setSelectedCategory)
   const [page, setPage] = useState(1)
+  const [selectedProduct, setSelectedProduct] = useState(null)
 
   const { products, loading, error, source } = useProducts()
   const categories = useCategories()
@@ -41,6 +43,7 @@ function ProductGallery() {
   }
 
   return (
+    <>
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
       {/* Banner de fuente de datos */}
@@ -98,7 +101,7 @@ function ProductGallery() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
             {paginated.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} onViewDetail={setSelectedProduct} />
             ))}
           </div>
         </>
@@ -154,6 +157,14 @@ function ProductGallery() {
         </div>
       )}
     </section>
+
+    {selectedProduct && (
+      <ProductDetail
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
+    )}
+    </>
   )
 }
 
