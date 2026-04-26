@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import SearchBar from '../molecules/SearchBar'
 import useStore from '../../store/useStore'
+import { useToastContext } from '../../context/ToastContext'
 
 function Header({ onLoginClick, onWishlistClick }) {
   const toggleCart = useStore((state) => state.toggleCart)
@@ -10,8 +11,15 @@ function Header({ onLoginClick, onWishlistClick }) {
   const user = useStore((state) => state.user)
   const logout = useStore((state) => state.logout)
   const [menuOpen, setMenuOpen] = useState(false)
-
+  const addToast = useToastContext()
   const count = cartCount()
+
+  const handleLogout = () => {
+    const name = user?.name?.firstname
+    logout()
+    addToast(`Hasta pronto${name ? `, ${name}` : ''}! 👋`, 'info')
+    setMenuOpen(false)
+  }
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
@@ -53,7 +61,7 @@ function Header({ onLoginClick, onWishlistClick }) {
             {isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <span className="hidden md:block text-sm font-medium text-gray-700">{user?.name?.firstname}</span>
-                <button onClick={logout} className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors" aria-label="Cerrar sesión">
+                <button onClick={handleLogout} className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors" aria-label="Cerrar sesión">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
@@ -95,7 +103,7 @@ function Header({ onLoginClick, onWishlistClick }) {
             Carrito {count > 0 && <span className="ml-auto text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">{count}</span>}
           </button>
           {isAuthenticated ? (
-            <button onClick={() => { logout(); setMenuOpen(false) }} className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+            <button onClick={handleLogout} className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
               <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
               Cerrar sesión ({user?.name?.firstname})
             </button>
