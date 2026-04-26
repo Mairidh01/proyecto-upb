@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Button from '../atoms/Button'
+import Input from '../atoms/Input'
 import useStore from '../../store/useStore'
 
 function CheckoutPreview({ onClose }) {
@@ -12,12 +13,36 @@ function CheckoutPreview({ onClose }) {
 
   const [confirmed, setConfirmed] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [orderNumber] = useState(() => Math.floor(Math.random() * 90000) + 10000)
+  const [address, setAddress] = useState({
+    name: user ? `${user.name.firstname} ${user.name.lastname}` : '',
+    street: '',
+    city: '',
+    zip: '',
+  })
+  const [addressErrors, setAddressErrors] = useState({})
+
+  const validateAddress = () => {
+    const errs = {}
+    if (!address.name.trim()) errs.name = 'Requerido'
+    if (!address.street.trim()) errs.street = 'Requerido'
+    if (!address.city.trim()) errs.city = 'Requerido'
+    if (!address.zip.trim()) errs.zip = 'Requerido'
+    return errs
+  }
+
+  const handleField = (field) => (e) => {
+    setAddress((prev) => ({ ...prev, [field]: e.target.value }))
+    setAddressErrors((prev) => ({ ...prev, [field]: '' }))
+  }
 
   const subtotal = cartTotal()
   const shipping = subtotal > 100 ? 0 : 9.99
   const total = subtotal + shipping
 
   const handleConfirm = () => {
+    const errs = validateAddress()
+    if (Object.keys(errs).length) { setAddressErrors(errs); return }
     setLoading(true)
     setTimeout(() => {
       setConfirmed(true)
@@ -67,6 +92,9 @@ function CheckoutPreview({ onClose }) {
                   : 'Tu pedido ha sido registrado correctamente.'}
               </p>
             </div>
+            <p className="text-xs font-mono bg-gray-100 px-3 py-1 rounded-lg text-gray-600">
+              Pedido #{orderNumber}
+            </p>
             <p className="text-xs text-gray-400">Recibirás un correo de confirmación pronto.</p>
             <Button onClick={handleClose} fullWidth>
               Seguir comprando
@@ -92,6 +120,21 @@ function CheckoutPreview({ onClose }) {
                   </span>
                 </div>
               ))}
+            </div>
+
+            {/* Formulario de dirección */}
+            <div className="px-6 py-4 border-t border-gray-100 flex flex-col gap-3 shrink-0">
+              <h3 className="text-sm font-semibold text-gray-800">Dirección de envío</h3>
+              <Input id="name" label="Nombre completo" value={address.name}
+                onChange={handleField('name')} error={addressErrors.name} />
+              <Input id="street" label="Dirección" placeholder="Calle y número"
+                value={address.street} onChange={handleField('street')} error={addressErrors.street} />
+              <div className="grid grid-cols-2 gap-2">
+                <Input id="city" label="Ciudad" value={address.city}
+                  onChange={handleField('city')} error={addressErrors.city} />
+                <Input id="zip" label="Código postal" value={address.zip}
+                  onChange={handleField('zip')} error={addressErrors.zip} />
+              </div>
             </div>
 
             {/* Resumen de costos */}
