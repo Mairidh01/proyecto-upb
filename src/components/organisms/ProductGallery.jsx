@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { ProductCard, ProductCardSkeleton } from '../molecules'
 import Button from '../atoms/Button'
 import ProductDetail from './ProductDetail'
-import { useProducts, useCategories } from '../../hooks'
+import { useProducts, useCategories, usePagination } from '../../hooks'
 import useStore from '../../store/useStore'
 
 const PAGE_SIZE = 6
@@ -11,7 +11,6 @@ function ProductGallery() {
   const searchQuery = useStore((state) => state.searchQuery)
   const selectedCategory = useStore((state) => state.selectedCategory)
   const setSelectedCategory = useStore((state) => state.setSelectedCategory)
-  const [page, setPage] = useState(1)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [sortBy, setSortBy] = useState('default')
   const [maxPrice, setMaxPrice] = useState(1000)
@@ -40,16 +39,10 @@ function ProductGallery() {
     return result
   }, [products, searchQuery, selectedCategory, sortBy, maxPrice])
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
-  const currentPage = Math.min(page, totalPages)
-  const paginated = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  )
+  const { paginated, currentPage, totalPages, goTo, next, prev } = usePagination(filtered, PAGE_SIZE)
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId)
-    setPage(1)
   }
 
   return (
@@ -168,7 +161,7 @@ function ProductGallery() {
             variant="secondary"
             size="sm"
             disabled={currentPage === 1}
-            onClick={() => setPage((p) => p - 1)}
+            onClick={prev}
           >
             ← Anterior
           </Button>
@@ -176,7 +169,7 @@ function ProductGallery() {
             {Array.from({ length: totalPages }).map((_, i) => (
               <button
                 key={i}
-                onClick={() => setPage(i + 1)}
+                onClick={() => goTo(i + 1)}
                 className={[
                   'w-8 h-8 rounded-lg text-sm font-medium transition-colors',
                   currentPage === i + 1
@@ -192,7 +185,7 @@ function ProductGallery() {
             variant="secondary"
             size="sm"
             disabled={currentPage === totalPages}
-            onClick={() => setPage((p) => p + 1)}
+            onClick={next}
           >
             Siguiente →
           </Button>
