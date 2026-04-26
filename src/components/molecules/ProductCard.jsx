@@ -2,6 +2,7 @@ import Button from '../atoms/Button'
 import Badge from '../atoms/Badge'
 import Rating from '../atoms/Rating'
 import WishlistButton from '../atoms/WishlistButton'
+import PriceTag from './PriceTag'
 import useStore from '../../store/useStore'
 import { useToastContext } from '../../context/ToastContext'
 
@@ -60,9 +61,7 @@ function ProductCard({ product, onViewDetail }) {
         <Rating rate={product.rating.rate} count={product.rating.count} />
 
         <div className="flex items-center justify-between mt-1">
-          <span className="text-lg font-bold text-indigo-600">
-            ${product.price.toFixed(2)}
-          </span>
+          <PriceTag price={product.price} discountPct={product.rating.count > 100 ? 10 : 0} />
           <Button size="sm" onClick={handleAddToCart}>
             Agregar
           </Button>

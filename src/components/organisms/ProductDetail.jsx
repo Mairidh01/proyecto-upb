@@ -1,6 +1,7 @@
 import Button from '../atoms/Button'
 import Badge from '../atoms/Badge'
 import Rating from '../atoms/Rating'
+import PriceTag from '../molecules/PriceTag'
 import useStore from '../../store/useStore'
 import { useToastContext } from '../../context/ToastContext'
 
@@ -73,9 +74,7 @@ function ProductDetail({ product, onClose }) {
             </p>
 
             <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
-              <span className="text-3xl font-bold text-indigo-600">
-                ${product.price.toFixed(2)}
-              </span>
+              <PriceTag price={product.price} discountPct={product.rating.count > 100 ? 10 : 0} size="lg" />
               <Button size="lg" onClick={handleAddToCart}>
                 Agregar al carrito
               </Button>
