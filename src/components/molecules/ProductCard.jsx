@@ -1,6 +1,7 @@
 import Button from '../atoms/Button'
 import Badge from '../atoms/Badge'
 import Rating from '../atoms/Rating'
+import WishlistButton from '../atoms/WishlistButton'
 import useStore from '../../store/useStore'
 import { useToastContext } from '../../context/ToastContext'
 
@@ -37,6 +38,9 @@ function ProductCard({ product, onViewDetail }) {
           <Badge variant="primary">
             {categoryLabels[product.category] ?? product.category}
           </Badge>
+        </div>
+        <div className="absolute top-3 right-3">
+          <WishlistButton product={product} />
         </div>
       </button>
 

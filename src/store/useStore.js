@@ -42,6 +42,19 @@ const useStore = create(
       login: (userData) => set({ user: userData, isAuthenticated: true }),
       logout: () => set({ user: null, isAuthenticated: false }),
 
+      // --- Wishlist ---
+      wishlist: [],
+      toggleWishlist: (product) => {
+        const exists = get().wishlist.find((p) => p.id === product.id)
+        set((state) => ({
+          wishlist: exists
+            ? state.wishlist.filter((p) => p.id !== product.id)
+            : [...state.wishlist, product],
+        }))
+      },
+      isWishlisted: (productId) =>
+        get().wishlist.some((p) => p.id === productId),
+
       // --- UI ---
       searchQuery: '',
       setSearchQuery: (query) => set({ searchQuery: query }),
@@ -56,6 +69,7 @@ const useStore = create(
         cart: state.cart,
         user: state.user,
         isAuthenticated: state.isAuthenticated,
+        wishlist: state.wishlist,
       }),
     }
   )
