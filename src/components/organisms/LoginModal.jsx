@@ -3,9 +3,11 @@ import Button from '../atoms/Button'
 import Input from '../atoms/Input'
 import { users } from '../../data'
 import useStore from '../../store/useStore'
+import { useToastContext } from '../../context/ToastContext'
 
 function LoginModal({ onClose }) {
   const login = useStore((state) => state.login)
+  const addToast = useToastContext()
   const [form, setForm] = useState({ username: '', password: '' })
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
@@ -30,6 +32,7 @@ function LoginModal({ onClose }) {
       if (found) {
         const { password: _, ...safeUser } = found
         login(safeUser)
+        addToast(`¡Bienvenido, ${safeUser.name.firstname}! 👋`, 'success')
         onClose()
       } else {
         setErrors({ general: 'Usuario o contraseña incorrectos' })

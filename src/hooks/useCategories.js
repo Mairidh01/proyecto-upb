@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { categories as mockCategories } from '../data'
 
-const API_URL = 'https://fakestoreapi.com/products/categories'
+const API_URL = `${import.meta.env.VITE_API_URL}/products/categories`
 
 const labelMap = {
   electronics: 'Electrónica',
