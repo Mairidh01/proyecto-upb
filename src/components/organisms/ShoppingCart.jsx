@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import CartItem from '../molecules/CartItem'
 import Button from '../atoms/Button'
+import CheckoutPreview from './CheckoutPreview'
 import useStore from '../../store/useStore'
 
 function ShoppingCart() {
@@ -8,6 +10,7 @@ function ShoppingCart() {
   const cart = useStore((state) => state.cart)
   const cartTotal = useStore((state) => state.cartTotal)
   const clearCart = useStore((state) => state.clearCart)
+  const [showCheckout, setShowCheckout] = useState(false)
 
   return (
     <>
@@ -78,7 +81,7 @@ function ShoppingCart() {
                 ${cartTotal().toFixed(2)}
               </span>
             </div>
-            <Button fullWidth size="lg">
+            <Button fullWidth size="lg" onClick={() => setShowCheckout(true)}>
               Finalizar compra
             </Button>
             <Button fullWidth variant="ghost" size="sm" onClick={clearCart}>
@@ -87,6 +90,10 @@ function ShoppingCart() {
           </div>
         )}
       </aside>
+
+      {showCheckout && (
+        <CheckoutPreview onClose={() => setShowCheckout(false)} />
+      )}
     </>
   )
 }
