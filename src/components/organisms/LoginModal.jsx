@@ -47,12 +47,12 @@ function LoginModal({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+    <div role="dialog" aria-modal="true" aria-labelledby="login-title" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 flex flex-col gap-5">
         {/* Cabecera */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Iniciar sesión</h2>
+            <h2 id="login-title" className="text-xl font-bold text-gray-900">Iniciar sesión</h2>
             <p className="text-sm text-gray-500 mt-0.5">Accede a tu cuenta</p>
           </div>
           <button

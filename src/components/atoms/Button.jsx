@@ -31,6 +31,7 @@ function Button({
       className={[
         'inline-flex items-center justify-center gap-2 rounded-lg font-medium',
         'transition-colors duration-150 cursor-pointer',
+        'focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2',
         'disabled:opacity-50 disabled:cursor-not-allowed',
         variants[variant],
         sizes[size],

@@ -24,6 +24,9 @@ function ShoppingCart() {
 
       {/* Panel lateral */}
       <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label="Carrito de compras"
         className={[
           'fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-50',
           'flex flex-col shadow-2xl transition-transform duration-300 ease-in-out',
