@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { MainLayout } from './components/templates'
-import { ProductGallery, LoginModal, ToastContainer, WishlistPanel } from './components/organisms'
+import { ProductGallery, LoginModal, ToastContainer, WishlistPanel, HeroBanner } from './components/organisms'
 import ScrollToTop from './components/atoms/ScrollToTop'
 import { ToastContext } from './context/ToastContext'
 import useToast from './hooks/useToast'
@@ -16,6 +16,7 @@ function App() {
         onLoginClick={() => setShowLogin(true)}
         onWishlistClick={() => setShowWishlist(true)}
       >
+        <HeroBanner />
         <ProductGallery />
         {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
         {showWishlist && <WishlistPanel onClose={() => setShowWishlist(false)} />}
